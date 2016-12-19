@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161217213800) do
+ActiveRecord::Schema.define(version: 20161219140553) do
 
   create_table "pessoas_fisicas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "cpf",             limit: 11, null: false
@@ -19,6 +19,17 @@ ActiveRecord::Schema.define(version: 20161217213800) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.index ["cpf"], name: "index_cpf_unique", unique: true, using: :btree
+  end
+
+  create_table "pessoas_juridicas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "cnpj",          limit: 14, null: false
+    t.string   "razao_social",  limit: 70, null: false
+    t.string   "nome_fantasia", limit: 70, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["cnpj"], name: "index_cnpj_unique", unique: true, using: :btree
+    t.index ["nome_fantasia"], name: "index_nome_fantasia_unique", unique: true, using: :btree
+    t.index ["razao_social"], name: "index_razao_social_unique", unique: true, using: :btree
   end
 
 end
