@@ -7,7 +7,7 @@ RSpec.describe PessoaFisica, type: :model do
     context ':cpf' do
       it 'deve estar presente' do should validate_presence_of(:cpf) end
       it 'deve ser único' do should validate_uniqueness_of(:cpf).case_insensitive end
-      it 'deve ser numérico' do should validate_numericality_of(:cpf).only_integer end
+      it 'deve ser numérico e inteiro' do should validate_numericality_of(:cpf).only_integer end
       it 'deve ter 11 caracteres' do should validate_length_of(:cpf).is_equal_to(11) end
     end
 

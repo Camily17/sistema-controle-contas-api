@@ -11,4 +11,6 @@ class PessoaFisica < ApplicationRecord
 
   validates :data_nascimento, presence: true
   validates_date :data_nascimento, on_or_before: -> { Date.today }
+
+  has_many :contas, as: :pessoa
 end

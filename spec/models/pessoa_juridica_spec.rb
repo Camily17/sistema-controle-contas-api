@@ -7,7 +7,7 @@ RSpec.describe PessoaJuridica, type: :model do
     context ':cnpj' do
       it 'deve estar presente' do should validate_presence_of(:cnpj) end
       it 'deve ser único' do should validate_uniqueness_of(:cnpj).case_insensitive end
-      it 'deve ser numérico' do should validate_numericality_of(:cnpj).only_integer end
+      it 'deve ser numérico e inteiro' do should validate_numericality_of(:cnpj).only_integer end
       it 'deve ter 14 caracteres' do should validate_length_of(:cnpj).is_equal_to(14) end
     end
 

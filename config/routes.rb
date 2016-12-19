@@ -3,6 +3,7 @@
       namespace :v1 do
         resources :pessoas_fisicas
         resources :pessoas_juridicas
+        resources :contas
       end
     end
   end
