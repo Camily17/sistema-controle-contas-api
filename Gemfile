@@ -9,7 +9,9 @@ gem 'validates_timeliness', '~> 4.0'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
+  gem 'rails-controller-testing' # Gem necessária para usar o método assing nos testes com RSpec
   gem 'factory_girl_rails'
+  gem 'faker'
   gem 'shoulda-matchers', require: true
 end
 
@@ -21,7 +23,6 @@ group :development do
 end
 
 group :test do
-  gem 'faker'
   gem 'database_cleaner'
 end
 

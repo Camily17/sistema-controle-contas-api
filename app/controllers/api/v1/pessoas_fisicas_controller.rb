@@ -29,7 +29,7 @@ module API
       # PATCH/PUT /pessoas_fisicas/1
       def update
         if @pessoa_fisica.update(pessoa_fisica_params)
-          render json: @pessoa_fisica
+          render json: @pessoa_fisica, status: 200
         else
           render json: @pessoa_fisica.errors, status: 422
         end
@@ -38,6 +38,7 @@ module API
       # DELETE /pessoas_fisicas/1
       def destroy
         @pessoa_fisica.destroy
+        head 204
       end
 
       private
