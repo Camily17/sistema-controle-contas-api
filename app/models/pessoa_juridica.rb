@@ -11,4 +11,6 @@ class PessoaJuridica < ApplicationRecord
   validates :nome_fantasia, presence: true,
                             uniqueness: true,
                             length: { in: 2..70 }
+
+  has_many :contas, as: :pessoa
 end

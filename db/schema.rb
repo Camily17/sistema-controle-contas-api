@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219140553) do
+ActiveRecord::Schema.define(version: 20161219222157) do
+
+  create_table "contas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "nome",        limit: 70,                            null: false
+    t.decimal  "saldo",                  precision: 10, default: 0, null: false
+    t.integer  "status",                                default: 0, null: false
+    t.string   "pessoa_type"
+    t.integer  "pessoa_id"
+    t.string   "ancestry"
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.index ["ancestry"], name: "index_contas_on_ancestry", using: :btree
+    t.index ["nome"], name: "index_nome_unique", unique: true, using: :btree
+    t.index ["pessoa_id", "pessoa_type"], name: "index_contas_on_pessoa_id_and_pessoa_type", using: :btree
+    t.index ["pessoa_type", "pessoa_id"], name: "index_contas_on_pessoa_type_and_pessoa_id", using: :btree
+  end
 
   create_table "pessoas_fisicas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "cpf",             limit: 11, null: false

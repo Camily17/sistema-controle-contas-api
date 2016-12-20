@@ -1,7 +1,7 @@
 RSpec.shared_examples 'POST #create' do |klass|
 
   context 'com parâmetros válidos' do
-    it 'criar uma nova PessoaFisica' do
+    it "criar um objeto #{klass}" do
       expect {
         post :create, body: parametros_validos.to_json
       }.to change(klass, :count).by(1)
