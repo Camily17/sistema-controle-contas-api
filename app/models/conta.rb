@@ -17,4 +17,5 @@ class Conta < ApplicationRecord
   validates :pessoa_id, presence: true
 
   belongs_to :pessoa, polymorphic: true
+  has_ancestry
 end

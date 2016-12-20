@@ -5,6 +5,7 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.0'
 gem 'validates_timeliness', '~> 4.0'
+gem 'ancestry'
 
 group :development, :test do
   gem 'byebug', platform: :mri

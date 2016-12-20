@@ -53,7 +53,7 @@ module API
 
       # Only allow a trusted parameter "white list" through.
       def conta_params
-        params.require(:conta).permit(:nome, :saldo, :status, :pessoa_id, :pessoa_type)
+        params.require(:conta).permit(:nome, :saldo, :status, :pessoa_id, :pessoa_type, :ancestry)
       end
     end
   end
