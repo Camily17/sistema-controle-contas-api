@@ -41,7 +41,8 @@ class Transacao < ApplicationRecord
     set_valores_padrao
 
     case self.tipo
-      when 'carga' || 0 then TransacaoCargaService.new(self).efetuar
+      when 'carga' then TransacaoCargaService.new(self).efetuar
+      when 'transferencia' then TransacaoTransferenciaService.new(self).efetuar
       else false
     end
   end

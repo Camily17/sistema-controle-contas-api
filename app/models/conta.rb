@@ -1,5 +1,5 @@
 class Conta < ApplicationRecord
-  after_initialize :iniciar_saldo
+  after_initialize :iniciar_saldo, if: :new_record?
 
   enum status: ['cancelado', 'ativo', 'bloqueado']
 
@@ -41,13 +41,12 @@ class Conta < ApplicationRecord
   end
 
   def sacar(valor)
-    unless valor >= @saldo
+    unless valor <= self.saldo
       errors.add(:valor, message: 'deve ser maior ou igual ao saldo.')
       return self
     end
 
     self.saldo -= valor
-
     self
   end
 end
