@@ -12,6 +12,9 @@ class TransacaoTransferenciaService
         @transacao.conta_destino.depositar(@transacao.valor).save
         @transacao.save
       end
+
+      raise unless @transacao.errors.messages.blank?
+      true
     rescue
       false
     end
@@ -20,17 +23,17 @@ class TransacaoTransferenciaService
   private
     def transacao_de_transferencia_valida?
       @transacao.errors.add(:id, :not_blank, message: 'não pode ser fornecido.') if @transacao.id
-      @transacao.errors.add(:id, :incosistent, message: 'não pode transferir para a mesma conta.') if @transacao.conta_destino == @transacao.conta_origem
-      @transacao.errors.add(:conta_origem, :blank, message: 'deve estar presente.') unless @transacao.conta_origem
-      @transacao.errors.add(:contao_destino, :blank, message: 'deve estar presente.') unless @transacao.conta_destino
+      @transacao.errors.add(:id, :incosistent, message: 'não pode transferir para a mesma conta.') if @transacao.conta_destino_id == @transacao.conta_origem_id
+      @transacao.errors.add(:conta_origem, :blank, message: 'deve estar presente.') unless @transacao.conta_origem_id
+      @transacao.errors.add(:conta_destino, :blank, message: 'deve estar presente.') unless @transacao.conta_destino_id
       @transacao.errors.add(:estornado, :not_false, message: 'deve ser falso.') if @transacao.estornado
       @transacao.errors.add(:codigo_transacional_estornado, :not_blank, message: 'não pode ser fornecido.') if @transacao.codigo_transacional_estornado
 
-      if @transacao.conta_origem && @transacao.conta_destino
+      if @transacao.conta_origem_id && @transacao.conta_destino_id
         @transacao.errors.add(:contas, :not_hierarchical, message: 'não têm a mesma hierarquia.') if @transacao.conta_origem.root.id != @transacao.conta_destino.root.id
       end
 
-      if @transacaoconta_destino
+      if @transacao.conta_destino_id
         @transacao.errors.add(:conta_destino, :matriz, message: 'é uma conta matriz não pode receber transferência.') if @transacao.conta_destino.root.id == @transacao.conta_destino.id
       end
 

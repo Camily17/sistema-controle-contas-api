@@ -8,7 +8,8 @@ module TransacaoHelper
       conta_destino_id = params[:conta_destino_id].to_s
       tipo = params[:tipo].to_s
 
-      Digest::MD5.hexdigest(date + conta_origem_id + tipo + conta_destino_id)
+      valor = date + conta_origem_id + tipo + conta_destino_id
+      Digest::MD5.hexdigest(valor)
     end
 
     private

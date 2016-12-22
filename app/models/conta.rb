@@ -9,7 +9,7 @@ class Conta < ApplicationRecord
                    length: { in: 2..70 }
 
   validates :saldo, presence: true,
-                    numericality: true
+                    numericality: { greater_than_or_equal_to: 0 }
 
   validates :status, presence: true,
                      inclusion: { in: Conta.statuses.keys }
@@ -42,7 +42,7 @@ class Conta < ApplicationRecord
 
   def sacar(valor)
     unless valor <= self.saldo
-      errors.add(:valor, message: 'deve ser maior ou igual ao saldo.')
+      self.errors.add(:valor, message: 'deve ser maior ou igual ao saldo.')
       return self
     end
 

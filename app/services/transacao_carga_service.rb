@@ -11,6 +11,9 @@ class TransacaoCargaService
         @transacao.conta_origem.depositar(@transacao.valor).save
         @transacao.save
       end
+
+      raise unless @transacao.errors.messages.blank?
+      true
     rescue
       @transacao.errors.messages.merge(@transacao.conta_origem.errors_messages)
       false
