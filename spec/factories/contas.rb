@@ -3,6 +3,7 @@ FactoryGirl.define do
     nome { Faker::Name.name }
     saldo { 0 }
     status { 1 }
+    ancestry { nil }
 
     factory :conta_pessoa_fisica do
       pessoa_type { 'PessoaFisica' }

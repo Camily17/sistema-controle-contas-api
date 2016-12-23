@@ -1,36 +1,25 @@
 FactoryGirl.define do
-  factory :transacao_carga, class: Transacao do
-    codigo_transacional { '' }
-    tipo { 'carga' }
-    valor { '500' }
-    conta_origem_id { nil }
-    conta_origem_valor_antes_transacao { nil }
-    conta_destino_id { nil }
-    conta_destino_valor_antes_transacao { nil }
-    estornado { false }
-    codigo_transacional_estornado { nil }
+  conta_origem = FactoryGirl.create(:conta_pessoa_fisica, saldo: 0)
+  codigo_transacional =  TransacaoHelper::Gerador.codigo_alphanumerico(
+    tipo: 'carga', conta_origem_id: conta_origem.id
+  )
 
-    factory :transacao_carga_invalida do
-      codigo_transacional { '' }
-      tipo { '' }
-      valor { nil }
-      conta_origem_id { nil }
-      conta_origem_valor_antes_transacao { nil }
+  factory :transacao_carga, class: Transacao do
+    tipo { 'carga' }
+    valor { 500 }
+    conta_origem_id { conta_origem.id }
+
+    trait :campos_completos do
+      codigo_transacional { codigo_transacional }
+      conta_origem_valor_antes_transacao { conta_origem.saldo }
       conta_destino_id { nil }
       conta_destino_valor_antes_transacao { nil }
       estornado { false }
       codigo_transacional_estornado { nil }
     end
-  end
 
-  factory :transacao_carga_atributos_validos, class: Transacao do
-    tipo  { 'carga' }
-    valor { '500' }
-    conta_origem_id { nil }
-
-    factory :transacao_carga_atributos_invalidos, class: Transacao do
-      tipo { 'carga' }
-      valor { -500 }
+    trait :campos_invalidos do
+      valor { -200 }
       conta_origem_id { nil }
     end
   end

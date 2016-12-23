@@ -8,41 +8,126 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
     request.headers.merge! headers
   end
 
-  let!(:conta_origem) { FactoryGirl.create(:conta_pessoa_fisica, saldo: 0) }
-  let!(:codigo_transacional) { TransacaoHelper::Gerador.codigo_alphanumerico(conta_origem_id: conta_origem.id, conta_origem_valor_antes_transacao: conta_origem.saldo, tipo: 'carga')}
-  let!(:transacao_carga) { FactoryGirl.create(:transacao_carga, codigo_transacional: codigo_transacional, conta_origem_id: conta_origem.id, conta_origem_valor_antes_transacao: conta_origem.saldo) }
-  let(:atributos_validos) { FactoryGirl.attributes_for(:transacao_carga_atributos_validos, conta_origem_id: conta_origem.id) }
-  let(:atributos_invalidos) { FactoryGirl.attributes_for(:transacao_carga_atributos_invalidos) }
+  context 'Transação do tipo carga' do
+    let!(:transacao_carga) { FactoryGirl.create(:transacao_carga, :campos_completos) }
+    let(:atributos_validos) { FactoryGirl.attributes_for(:transacao_carga) }
+    let(:atributos_invalidos) { FactoryGirl.attributes_for(:transacao_carga, :campos_invalidos) }
 
-  describe 'GET #index' do
-    it_behaves_like 'GET #index', Transacao do
-      let(:parametros) { {} }
-      let(:objeto_esperado) { transacao_carga }
+    describe 'GET #index' do
+      it_behaves_like 'GET #index', Transacao do
+        let(:parametros) { {} }
+        let(:objeto_esperado) { transacao_carga }
+      end
+    end
+
+    describe 'GET #show' do
+      it_behaves_like 'GET #show', Transacao do
+        let(:parametros) { { id: transacao_carga.id } }
+        let(:objeto_esperado) { transacao_carga }
+
+        let(:parametro_id_invalido) { { id: atributos_invalidos[:id] } }
+      end
+    end
+
+    describe 'POST #create' do
+      it_behaves_like 'POST #create', Transacao do
+        let(:parametros_validos) { { transacao: atributos_validos } }
+
+        let(:parametros_invalidos) { { transacao: atributos_invalidos } }
+      end
+
+      it 'atualizar saldo da conta origem' do
+        conta_origem = Conta.find_by(id: atributos_validos[:conta_origem_id])
+
+        expect {
+          post :create, body: atributos_validos.to_json
+        }.to change(Transacao, :count).by(1)
+
+        expect(conta_origem.reload.saldo).to eq(500)
+      end
     end
   end
 
-  describe 'GET #show' do
-    it_behaves_like 'GET #show', Transacao do
-      let(:parametros) { { id: transacao_carga.id } }
-      let(:objeto_esperado) { transacao_carga }
+  context 'Transação do tipo transferência' do
+    let!(:transacao_transferencia_hierarquia) { FactoryGirl.create(:transacao_transferencia_hierarquia, :campos_completos) }
 
-      let(:parametro_id_invalido) { { id: atributos_invalidos[:id] } }
-    end
-  end
-
-  describe 'POST #create' do
-    it_behaves_like 'POST #create', Transacao do
-      let(:parametros_validos) { { transacao: atributos_validos } }
-
-      let(:parametros_invalidos) { { transacao: atributos_invalidos } }
+    describe 'GET #index' do
+      it_behaves_like 'GET #index', Transacao do
+        let(:parametros) { {} }
+        let(:objeto_esperado) { transacao_transferencia_hierarquia }
+      end
     end
 
-    it 'atualizar saldo da conta origem' do
-      expect {
-        post :create, body: atributos_validos.to_json
-      }.to change(Transacao, :count).by(1)
+    describe 'GET #show' do
+      it_behaves_like 'GET #show válido', Transacao do
+        let(:parametros) { { id: transacao_transferencia_hierarquia.id } }
+        let(:objeto_esperado) { transacao_transferencia_hierarquia }
+      end
+    end
 
-      expect(conta_origem.reload.saldo).to eq(500)
+    describe 'POST #create' do
+      context 'com campos válidos' do
+        context 'e hierarquia' do
+          context 'válida' do
+            let(:atributos_validos_hierarquia) { FactoryGirl.attributes_for(:transacao_transferencia_hierarquia) }
+
+            it_behaves_like 'POST #create válido', Transacao do
+              let(:parametros_validos) { { transacao: atributos_validos_hierarquia } }
+            end
+
+            it 'deve atualizar campos' do
+              atributos_validos_hierarquia =  FactoryGirl.attributes_for(:transacao_transferencia_hierarquia)
+              conta_origem = Conta.find_by(id: atributos_validos_hierarquia[:conta_origem_id])
+              conta_destino = Conta.find_by(id: atributos_validos_hierarquia[:conta_destino_id])
+
+              expect {
+                post :create, body: atributos_validos_hierarquia.to_json
+              }.to change(Transacao, :count).by(1)
+
+              expect(conta_origem.reload.saldo).to eq(750)
+              expect(conta_destino.reload.saldo).to eq(250)
+            end
+          end
+
+          context 'inválida' do
+            let(:atributos_validos_hierarquia_diferente) { FactoryGirl.attributes_for(:transacao_transferencia_hierarquia, :diferente) }
+
+            it_behaves_like 'POST #create inválido', Transacao do
+              let(:parametros_invalidos) { { transacao: atributos_validos_hierarquia_diferente } }
+            end
+
+            it 'não deve atualizar campos' do
+              atributos_validos_hierarquia_diferente = FactoryGirl.attributes_for(:transacao_transferencia_hierarquia, :diferente)
+              conta_origem = Conta.find_by(id: atributos_validos_hierarquia_diferente[:conta_origem_id])
+              conta_destino = Conta.find_by(id: atributos_validos_hierarquia_diferente[:conta_destino_id])
+
+              expect {
+                post :create, body: atributos_validos_hierarquia_diferente.to_json
+              }.not_to change(Transacao, :count)
+
+              expect(conta_origem.reload.saldo).to eq(1000)
+              expect(conta_destino.reload.saldo).to eq(0)
+            end
+          end
+        end
+
+        context 'e conta destino matriz deve ser inválido' do
+          context 'deve ser inválida' do
+            it 'não atualizar saldo da conta origem e destino' do
+              atributos_validos_matriz_invalida =  FactoryGirl.attributes_for(:transacao_transferencia_matriz)
+              conta_origem = Conta.find_by(id: atributos_validos_matriz_invalida[:conta_origem_id])
+              conta_destino = Conta.find_by(id: atributos_validos_matriz_invalida[:conta_destino_id])
+
+              expect {
+                post :create, body: atributos_validos_matriz_invalida.to_json
+              }.not_to change(Transacao, :count)
+
+              expect(conta_origem.reload.saldo).to eq(1000)
+              expect(conta_destino.reload.saldo).to eq(0)
+            end
+          end
+        end
+      end
     end
   end
 end

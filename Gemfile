@@ -11,7 +11,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
   gem 'rails-controller-testing' # Gem necessária para usar o método assing nos testes com RSpec
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: false
   gem 'faker'
   gem 'shoulda-matchers', require: true
 end

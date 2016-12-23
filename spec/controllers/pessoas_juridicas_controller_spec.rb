@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe API::V1::PessoasJuridicasController, type: :controller do
 
+  before(:each) do
+    DatabaseCleaner.strategy = :deletion
+  end
+
   before { @request.host = 'api.example.com' }
   before do
     headers = { 'Accept' => Mime[:json], 'Content-Type' => Mime[:json].to_s }

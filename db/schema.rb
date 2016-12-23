@@ -27,24 +27,6 @@ ActiveRecord::Schema.define(version: 20161220191757) do
     t.index ["pessoa_type", "pessoa_id"], name: "index_contas_on_pessoa_type_and_pessoa_id", using: :btree
   end
 
-  create_table "logs_transacoes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "codigo_transacional",                                                null: false
-    t.integer  "tipo",                                                               null: false
-    t.decimal  "valor",                               precision: 10,                 null: false
-    t.integer  "conta_origem_id",                                                    null: false
-    t.decimal  "conta_origem_valor_antes_transacao",  precision: 10,                 null: false
-    t.integer  "conta_destino_id"
-    t.decimal  "conta_destino_valor_antes_transacao", precision: 10
-    t.boolean  "estornado",                                          default: false, null: false
-    t.string   "codigo_transacional_estornado"
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
-    t.index ["codigo_transacional"], name: "index_codigo_transacional_unique", unique: true, using: :btree
-    t.index ["codigo_transacional_estornado"], name: "index_codigo_transacional_estornado_unique", unique: true, using: :btree
-    t.index ["conta_destino_id"], name: "index_logs_transacoes_on_conta_destino_id", using: :btree
-    t.index ["conta_origem_id"], name: "index_logs_transacoes_on_conta_origem_id", using: :btree
-  end
-
   create_table "pessoas_fisicas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "cpf",             limit: 11, null: false
     t.string   "nome",            limit: 70, null: false
