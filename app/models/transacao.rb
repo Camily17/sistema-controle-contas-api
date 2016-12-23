@@ -12,17 +12,15 @@ class Transacao < ApplicationRecord
                     numericality: { greater_than: 0 }
 
   validates :conta_origem_id, presence: true,
-                              numericality: true
+                              numericality: { only_integer: true }
 
   validates :conta_origem_valor_antes_transacao, presence: true,
                                                  numericality: { greater_than_or_equal_to: 0 }
 
-  validates :conta_destino_id, numericality: true,
+  validates :conta_destino_id, numericality: { only_integer: true },
                               allow_nil: { if: Proc.new { |t| t.tipo == 'carga' } }
 
   validates :conta_destino_valor_antes_transacao, numericality: { greater_than_or_equal_to: 0 }, allow_nil: { if: Proc.new { |t| t.conta_destino_id.nil? } }
-
-  validates :estornado, inclusion: { in: [true, false] }
 
   validates :codigo_transacional_estornado, uniqueness: true, length: { is: 32 }, allow_nil: { if: Proc.new { |t| t.estornado == true } }
 

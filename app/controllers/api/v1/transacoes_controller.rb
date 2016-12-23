@@ -5,7 +5,7 @@ module API
 
       # GET /transacoes
       def index
-        @transacoes = Transacao.includes(:contas).where('conta_origem_id = ? OR conta_destino_id = ?', transacao_params[:conta_origem_id], transacao_params[:conta_destino_id])
+        @transacoes = Transacao.all
 
         render json: @transacoes, status: 200
       end
@@ -17,10 +17,16 @@ module API
 
       # POST /transacoes
       def create
-        @transacao = Transacao.new(transacao_params)
+        case params[:transacao][:tipo]
+          when 'carga' then @transacao = Transacao.new(transacao_params_carga)
+          when 'transferencia' then @transacao = Transacao.new(transacao_params_transferencia)
+          when 'estorno' then @transacao = Transacao.new(transacao_params_estorno)
+          else
+            @transacao = OpenStruct.new(errors: ({tipo: [{message: 'deve ser válido'}]}).to_json, efetuar: false)
+        end
 
         if @transacao.efetuar
-          head 204, location: @transacao
+          head 204, location: api_v1_transacao_url(@transacao.id)
         else
           render json: @transacao.errors, status: 422
         end
@@ -29,8 +35,7 @@ module API
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_transacao
-        @transacao = Transacao.includes(:contas).where('conta_origem_id = ? OR conta_destino_id = ?, id = ?', transacao_params[:conta_origem_id], transacao_params[:conta_destino_id] ,params[:id])
-
+        @transacao = Transacao.find(params[:id])
       rescue
         head 404
       end
@@ -45,6 +50,18 @@ module API
             :tipo, :valor, :conta_origem_id, :conta_destino_id,
             :estornado, :condigo_transacional_estornado
         )
+      end
+
+      def transacao_params_carga
+        params.require(:transacao).permit(:tipo, :valor, :conta_origem_id)
+      end
+
+      def transacao_params_transferencia
+        params.require(:transacao).permit(:tipo, :valor, :conta_origem_id, :conta_destino_id)
+      end
+
+      def transacao_params_estorno
+        params.require(:transacao).permit(:tipo, :condigo_transacional_estornado)
       end
     end
   end

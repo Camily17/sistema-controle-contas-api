@@ -3,7 +3,7 @@ module TransacaoHelper
     def self.codigo_alphanumerico(params)
       return false unless validar_parametros_codigo_alphanumerico(params)
 
-      date = DateTime.now.strftime('%Y%m%d%H%M%S').to_s
+      date = DateTime.now.strftime('%Y%m%d%H%M%S%L').to_s
       conta_origem_id = params[:conta_origem_id].to_s
       conta_destino_id = params[:conta_destino_id].to_s
       tipo = params[:tipo].to_s
