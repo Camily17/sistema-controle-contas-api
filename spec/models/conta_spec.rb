@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Conta, type: :model do
+  before(:all) { DatabaseCleaner.clean_with(:deletion) }
+
   let!(:contas) { FactoryGirl.create(:conta_pessoa_fisica) }
 
   describe 'Validações' do

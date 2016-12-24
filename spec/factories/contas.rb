@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :conta do
-    nome { Faker::Name.name }
+    sequence(:nome, 'a') {|l| Faker::Name.name + l }
     saldo { 0 }
     status { 1 }
     ancestry { nil }

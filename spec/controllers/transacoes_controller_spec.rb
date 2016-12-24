@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe API::V1::TransacoesController, type: :controller do
-
   before { @request.host = 'api.example.com' }
   before do
     headers = { 'Accept' => Mime[:json], 'Content-Type' => Mime[:json].to_s }
@@ -9,6 +8,8 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
   end
 
   context 'Transação do tipo carga' do
+    before(:all) { DatabaseCleaner.clean_with(:deletion) }
+
     let!(:transacao_carga) { FactoryGirl.create(:transacao_carga, :campos_completos) }
     let(:atributos_validos) { FactoryGirl.attributes_for(:transacao_carga) }
     let(:atributos_invalidos) { FactoryGirl.attributes_for(:transacao_carga, :campos_invalidos) }
@@ -49,6 +50,8 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
   end
 
   context 'Transação do tipo transferência' do
+    before(:all) { DatabaseCleaner.clean_with(:deletion) }
+
     let!(:transacao_transferencia_hierarquia) { FactoryGirl.create(:transacao_transferencia_hierarquia, :campos_completos) }
 
     describe 'GET #index' do
@@ -69,14 +72,14 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
       context 'com campos válidos' do
         context 'e hierarquia' do
           context 'válida' do
-            let(:atributos_validos_hierarquia) { FactoryGirl.attributes_for(:transacao_transferencia_hierarquia) }
+            let(:atributos_validos_hierarquia) { Objetos.converter_hash_simbolizado(FactoryGirl.build(:transacao_transferencia_hierarquia, :igual)) }
 
             it_behaves_like 'POST #create válido', Transacao do
               let(:parametros_validos) { { transacao: atributos_validos_hierarquia } }
             end
 
             it 'deve atualizar campos' do
-              atributos_validos_hierarquia =  FactoryGirl.attributes_for(:transacao_transferencia_hierarquia)
+              atributos_validos_hierarquia =  Objetos.converter_hash_simbolizado(FactoryGirl.build(:transacao_transferencia_hierarquia, :igual))
               conta_origem = Conta.find_by(id: atributos_validos_hierarquia[:conta_origem_id])
               conta_destino = Conta.find_by(id: atributos_validos_hierarquia[:conta_destino_id])
 
@@ -90,14 +93,14 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
           end
 
           context 'inválida' do
-            let(:atributos_validos_hierarquia_diferente) { FactoryGirl.attributes_for(:transacao_transferencia_hierarquia, :diferente) }
+            let(:atributos_validos_hierarquia_diferente) { Objetos.converter_hash_simbolizado(FactoryGirl.build(:transacao_transferencia_hierarquia, :diferente)) }
 
             it_behaves_like 'POST #create inválido', Transacao do
               let(:parametros_invalidos) { { transacao: atributos_validos_hierarquia_diferente } }
             end
 
             it 'não deve atualizar campos' do
-              atributos_validos_hierarquia_diferente = FactoryGirl.attributes_for(:transacao_transferencia_hierarquia, :diferente)
+              atributos_validos_hierarquia_diferente = Objetos.converter_hash_simbolizado(FactoryGirl.build(:transacao_transferencia_hierarquia, :diferente))
               conta_origem = Conta.find_by(id: atributos_validos_hierarquia_diferente[:conta_origem_id])
               conta_destino = Conta.find_by(id: atributos_validos_hierarquia_diferente[:conta_destino_id])
 
@@ -114,7 +117,7 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
         context 'e conta destino matriz deve ser inválido' do
           context 'deve ser inválida' do
             it 'não atualizar saldo da conta origem e destino' do
-              atributos_validos_matriz_invalida =  FactoryGirl.attributes_for(:transacao_transferencia_matriz)
+              atributos_validos_matriz_invalida =  Objetos.converter_hash_simbolizado(FactoryGirl.build(:transacao_transferencia_matriz, :valida))
               conta_origem = Conta.find_by(id: atributos_validos_matriz_invalida[:conta_origem_id])
               conta_destino = Conta.find_by(id: atributos_validos_matriz_invalida[:conta_destino_id])
 

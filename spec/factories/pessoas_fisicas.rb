@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :pessoa_fisica do
     cpf { Faker::Number.number(11) }
-    nome { Faker::Name.name }
+    sequence(:nome, 'a') { |l| Faker::Name.name + l}
     data_nascimento { Date.today.strftime('%Y-%m-%d') }
 
     factory :pessoa_fisica_invalida do

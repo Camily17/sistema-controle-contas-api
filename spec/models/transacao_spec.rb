@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Transacao, type: :model do
+  before(:all) { DatabaseCleaner.clean_with(:deletion) }
+
   let!(:conta_origem) { FactoryGirl.create(:conta_pessoa_fisica, saldo: 0) }
   let!(:codigo_transacional) { TransacaoHelper::Gerador.codigo_alphanumerico(conta_origem_id: conta_origem.id, conta_origem_valor_antes_transacao: conta_origem.saldo, tipo: 'carga')}
   let!(:transacao_carga) { FactoryGirl.create(:transacao_carga, codigo_transacional: codigo_transacional, conta_origem_id: conta_origem.id, conta_origem_valor_antes_transacao: conta_origem.saldo) }
