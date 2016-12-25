@@ -22,6 +22,7 @@ RSpec.describe API::V1::PessoasJuridicasController, type: :controller do
     it_behaves_like 'GET #index', PessoaJuridica do
       let(:parametros) { {} }
       let(:objeto_esperado) { pessoa_juridica }
+      let(:numero_registros) { 1 }
     end
   end
 

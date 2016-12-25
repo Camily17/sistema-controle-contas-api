@@ -61,7 +61,7 @@ module API
       end
 
       def transacao_params_estorno
-        params.require(:transacao).permit(:tipo, :condigo_transacional_estornado)
+        params.require(:transacao).permit(:tipo, :codigo_transacional_estornado)
       end
     end
   end

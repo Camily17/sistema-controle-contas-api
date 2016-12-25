@@ -20,10 +20,9 @@ class TransacaoEstornoService
             return false
         end
         raise unless @transacao.errors.messages.blank? && @transacao_a_estornar.errors.messages.blank?
-        true
+        @transacao
       end
-    rescue => e
-      p e
+    rescue
       @transacao.errors.messages.merge!(@transacao_a_estornar.errors.messages)
       false
     end

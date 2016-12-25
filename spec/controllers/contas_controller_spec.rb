@@ -18,6 +18,7 @@ RSpec.describe API::V1::ContasController, type: :controller do
     it_behaves_like 'GET #index', Conta do
       let(:parametros) { {} }
       let(:objeto_esperado) { conta }
+      let(:numero_registros) { 1 }
     end
   end
 

@@ -13,7 +13,7 @@ class TransacaoCargaService
       end
 
       raise unless @transacao.errors.messages.blank?
-      true
+      @transacao
     rescue
       @transacao.errors.messages.merge(@transacao.conta_origem.errors.messages)
       false

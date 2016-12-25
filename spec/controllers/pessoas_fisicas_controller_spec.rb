@@ -18,6 +18,7 @@ RSpec.describe API::V1::PessoasFisicasController, type: :controller do
     it_behaves_like 'GET #index', PessoaFisica do
       let(:parametros) { {} }
       let(:objeto_esperado) { pessoa_fisica }
+      let(:numero_registros) { 1 }
     end
   end
 

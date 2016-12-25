@@ -5,8 +5,8 @@ FactoryGirl.define do
     conta_origem_id { FactoryGirl.create(:conta_pessoa_fisica, saldo: 0).id }
 
     trait :campos_completos do
-      codigo_transacional { 'Preencher no build' }
-      conta_origem_valor_antes_transacao { 'Preencher no build' }
+      codigo_transacional { nil }
+      conta_origem_valor_antes_transacao { nil }
       conta_destino_id { nil }
       conta_destino_valor_antes_transacao { nil }
       estornado { false }

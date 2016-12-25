@@ -14,7 +14,7 @@ class TransacaoTransferenciaService
       end
 
       raise unless @transacao.errors.messages.blank?
-      true
+      @transacao
     rescue
       false
     end
