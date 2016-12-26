@@ -37,7 +37,8 @@ module API
 
       # DELETE /contas/1
       def destroy
-        @conta.destroy
+        @conta.status = 'cancelado'
+        @conta.save
 
         head 204
       end
@@ -53,7 +54,7 @@ module API
 
       # Only allow a trusted parameter "white list" through.
       def conta_params
-        params.require(:conta).permit(:nome, :saldo, :status, :pessoa_id, :pessoa_type, :ancestry)
+        params.require(:conta).permit(:nome, :status, :pessoa_id, :pessoa_type, :ancestry)
       end
     end
   end

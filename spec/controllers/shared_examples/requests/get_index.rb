@@ -1,9 +1,10 @@
-RSpec.shared_examples 'GET #index' do |klass|
+RSpec.shared_examples 'GET #index' do |klass, inheritance_klass|
 
   before { get :index, params: parametros }
 
   it "retornar um array de #{klass.to_s.underscore.pluralize} válido" do
-    expect(assigns(klass.to_s.underscore.pluralize.to_sym)).to eq([objeto_esperado])
+    expect(assigns(klass.to_s.underscore.pluralize.to_sym).count).to eq(numero_registros)
+    expect(assigns(klass.to_s.underscore.pluralize.to_sym)).to include(objeto_esperado)
   end
 
   it 'não aceitar o body vazio' do

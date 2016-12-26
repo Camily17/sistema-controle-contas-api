@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :pessoa_juridica do
     cnpj { Faker::Number.number(14) }
-    razao_social { Faker::Company.name }
-    nome_fantasia { Faker::Company.name }
+    sequence(:razao_social,'a') { |l| Faker::Company.name + l }
+    sequence(:nome_fantasia, 'a') { |l| Faker::Company.name + l }
 
     factory :pessoa_juridica_invalida do
       id { 0 }

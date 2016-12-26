@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PessoaFisica, type: :model do
+  before(:all) { DatabaseCleaner.clean_with(:deletion) }
+
   let!(:pessoa_fisica) { FactoryGirl.create(:pessoa_fisica) }
 
   describe 'Validações' do

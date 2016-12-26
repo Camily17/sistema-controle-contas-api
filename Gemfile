@@ -6,12 +6,13 @@ gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.0'
 gem 'validates_timeliness', '~> 4.0'
 gem 'ancestry'
+gem 'abstraction'
 
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
   gem 'rails-controller-testing' # Gem necessária para usar o método assing nos testes com RSpec
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: false
   gem 'faker'
   gem 'shoulda-matchers', require: true
 end

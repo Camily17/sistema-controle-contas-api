@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe API::V1::PessoasJuridicasController, type: :controller do
+  before(:all) { DatabaseCleaner.clean_with(:deletion) }
+  after(:all) { DatabaseCleaner.clean_with(:deletion) }
+
+  before(:each) do
+    DatabaseCleaner.strategy = :deletion
+  end
 
   before { @request.host = 'api.example.com' }
   before do
@@ -16,6 +22,7 @@ RSpec.describe API::V1::PessoasJuridicasController, type: :controller do
     it_behaves_like 'GET #index', PessoaJuridica do
       let(:parametros) { {} }
       let(:objeto_esperado) { pessoa_juridica }
+      let(:numero_registros) { 1 }
     end
   end
 
