@@ -35,12 +35,6 @@ module API
         end
       end
 
-      # DELETE /pessoas_fisicas/1
-      def destroy
-        @pessoa_fisica.destroy
-        head 204
-      end
-
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_pessoa_fisica
