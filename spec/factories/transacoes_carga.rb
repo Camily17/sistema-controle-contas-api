@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :transacao_carga, class: Transacao do
+  factory :transacao_carga do
     tipo { 'carga' }
     valor { 500 }
     conta_origem_id { FactoryGirl.create(:conta_pessoa_fisica, saldo: 0).id }

@@ -6,6 +6,7 @@ gem 'mysql2', '>= 0.3.18', '< 0.5'
 gem 'puma', '~> 3.0'
 gem 'validates_timeliness', '~> 4.0'
 gem 'ancestry'
+gem 'abstraction'
 
 group :development, :test do
   gem 'byebug', platform: :mri

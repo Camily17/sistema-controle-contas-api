@@ -1,5 +1,5 @@
 FactoryGirl.define do
-    factory :transacao_transferencia_matriz, class: Transacao do
+    factory :transacao_transferencia_matriz, class: TransacaoTransferencia do
     tipo { 'transferencia' }
     valor { '250' }
     conta_origem_id { nil}

@@ -10,7 +10,7 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
   context 'Transação do tipo carga' do
     before(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-    let!(:transacao_carga) { FactoryGirl.create(:transacao_carga, :campos_completos) }
+    let!(:transacao_carga) { Transacao.find(FactoryGirl.create(:transacao_carga, :campos_completos).id) }
     let(:atributos_validos) { FactoryGirl.attributes_for(:transacao_carga) }
     let(:atributos_invalidos) { FactoryGirl.attributes_for(:transacao_carga, :campos_invalidos) }
 
@@ -53,7 +53,7 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
   context 'Transação do tipo transferência' do
     before(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-    let!(:transacao_transferencia_hierarquia) { FactoryGirl.create(:transacao_transferencia_hierarquia, :campos_completos) }
+    let!(:transacao_transferencia_hierarquia) { Transacao.find(FactoryGirl.create(:transacao_transferencia_hierarquia, :campos_completos).id) }
 
     describe 'GET #index' do
       it_behaves_like 'GET #index', Transacao do
@@ -140,7 +140,7 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
     context 'de carga' do
       before(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-      let!(:transacao_estorno_carga) { FactoryGirl.create(:transacao_estorno_carga, :campos_completos) }
+      let!(:transacao_estorno_carga) { Transacao.find(FactoryGirl.create(:transacao_estorno_carga, :campos_completos).id) }
 
       describe 'GET #index' do
         it_behaves_like 'GET #index', Transacao do
@@ -193,7 +193,7 @@ RSpec.describe API::V1::TransacoesController, type: :controller do
     context 'de transferência' do
       before(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-      let!(:transacao_estorno_transferencia) { FactoryGirl.create(:transacao_estorno_transferencia, :campos_completos) }
+      let!(:transacao_estorno_transferencia) { Transacao.find(FactoryGirl.create(:transacao_estorno_transferencia, :campos_completos).id) }
 
       describe 'GET #index' do
         it_behaves_like 'GET #index', Transacao do

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :transacao_estorno_carga, class: Transacao do
+  factory :transacao_estorno_carga, class: TransacaoEstorno do
     tipo { 'estorno' }
     estornado { true }
     codigo_transacional_estornado { nil }
@@ -17,7 +17,7 @@ FactoryGirl.define do
       conta_origem_valor_antes_transacao { nil }
 
       after(:build) do |transacao_estorno_carga|
-        transacao_carga_estornar = FactoryGirl.create(:transacao_carga, :campos_completos)
+        transacao_carga_estornar = Transacao.find(FactoryGirl.create(:transacao_carga, :campos_completos).id)
         conta = Conta.find(transacao_carga_estornar.conta_origem_id)
 
         codigo_transacional_estorno_carga =  TransacaoHelper::Gerador.codigo_alphanumerico(

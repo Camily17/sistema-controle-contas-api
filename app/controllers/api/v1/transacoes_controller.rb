@@ -18,9 +18,9 @@ module API
       # POST /transacoes
       def create
         case params[:transacao][:tipo]
-          when 'carga' then @transacao = Transacao.new(transacao_params_carga)
-          when 'transferencia' then @transacao = Transacao.new(transacao_params_transferencia)
-          when 'estorno' then @transacao = Transacao.new(transacao_params_estorno)
+          when 'carga' then @transacao = TransacaoCarga.new(transacao_params_carga)
+          when 'transferencia' then @transacao = TransacaoTransferencia.new(transacao_params_transferencia)
+          when 'estorno' then @transacao = TransacaoEstorno.new(transacao_params_estorno)
           else
             @transacao = OpenStruct.new(errors: ({tipo: [{message: 'deve ser válido'}]}).to_json, efetuar: false)
         end

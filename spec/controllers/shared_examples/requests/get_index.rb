@@ -1,4 +1,4 @@
-RSpec.shared_examples 'GET #index' do |klass|
+RSpec.shared_examples 'GET #index' do |klass, inheritance_klass|
 
   before { get :index, params: parametros }
 
