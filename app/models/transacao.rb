@@ -1,6 +1,8 @@
 class Transacao < ApplicationRecord
   enum tipo: [:carga, :transferencia, :estorno]
 
+  before_save
+
   validates :codigo_transacional, presence: true,
             uniqueness: true,
             length: { is: 32 }

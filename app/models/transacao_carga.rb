@@ -31,6 +31,7 @@ class TransacaoCarga < Transacao
       self.errors.add(:conta_destino_valor_antes_transacao, :not_blank, message: 'não pode ser fornecido.') if self.conta_destino_valor_antes_transacao
       self.errors.add(:estornado, :not_false, message: 'deve ser falso.') if self.estornado
       self.errors.add(:codigo_transacional_estornado, :not_blank, message: 'não pode ser fornecido.') if self.codigo_transacional_estornado
+      self.errors.add(:conta_origem, :not_active, message: 'deve ter status ativo.') unless self.conta_origem.conta_valida?
 
       return true if self.errors.messages.blank?
       false

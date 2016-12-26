@@ -4,7 +4,7 @@ Rails.application.routes.draw do
       resources :pessoas_fisicas
       resources :pessoas_juridicas
       resources :contas
-      resources :transacoes
+      resources :transacoes, only: [:index, :show, :create]
     end
   end
 end

@@ -37,7 +37,8 @@ module API
 
       # DELETE /contas/1
       def destroy
-        @conta.destroy
+        @conta.status = 'cancelado'
+        @conta.save
 
         head 204
       end

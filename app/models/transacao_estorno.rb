@@ -42,14 +42,17 @@ class TransacaoEstorno < Transacao
         self.errors.add(:codigo_transacional_estornado, :invalid)
         return false
       end
+
       if @transacao_a_estornar.estornado == true
-        self.errors.add(:estornado, :not_false, message: 'deve ser falso em transação a ser estornada.')
+        self.errors.add(:estornado, :not_false, message: 'transação já estordana.')
         return false
       end
+
       if @transacao_a_estornar.tipo == 'estorno'
-        self.errors.add(:tipo, :invalid, message: 'não deve ser estornado em transação a ser estornada.')
+        self.errors.add(:tipo, :invalid, message: 'não é possível estornar uma transação do tipo estorno.')
         return false
       end
+
       self.valor = @transacao_a_estornar.valor
       self.conta_origem_id = @transacao_a_estornar.conta_origem_id
       self.conta_origem_valor_antes_transacao = @transacao_a_estornar.conta_origem.saldo if @transacao_a_estornar.conta_origem_id
@@ -70,7 +73,7 @@ class TransacaoEstorno < Transacao
 
     def efetuar_estorno_carga
       @conta_origem = self.conta_origem
-      @conta_origem.sacar(self.valor)
+      @conta_origem.sacar_estorno(self.valor)
 
       @conta_origem.save if @conta_origem.errors.messages.blank?
 
@@ -95,7 +98,7 @@ class TransacaoEstorno < Transacao
     end
 
     def efetuar_estorno_transferencia
-      self.conta_destino.sacar(self.valor).save
+      self.conta_destino.sacar_estorno(self.valor).save
       self.conta_origem.depositar(self.valor).save
       self.save
 

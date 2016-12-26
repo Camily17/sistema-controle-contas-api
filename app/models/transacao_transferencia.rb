@@ -38,8 +38,13 @@ class TransacaoTransferencia < Transacao
         self.errors.add(:contas, :not_hierarchical, message: 'não têm a mesma hierarquia.') if self.conta_origem.root.id != self.conta_destino.root.id
       end
 
+      if self.conta_origem_id
+        self.errors.add(:conta_origem, :not_active, message: 'deve ter status ativo.') unless self.conta_origem.conta_valida?
+      end
+
       if self.conta_destino_id
         self.errors.add(:conta_destino, :matriz, message: 'é uma conta matriz não pode receber transferência.') if self.conta_destino.root.id == self.conta_destino.id
+        self.errors.add(:conta_destino, :not_active, message: 'deve ter status ativo.') unless self.conta_destino.conta_valida?
       end
 
       return true if self.errors.messages.blank?

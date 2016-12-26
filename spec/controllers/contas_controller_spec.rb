@@ -55,9 +55,24 @@ RSpec.describe API::V1::ContasController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    it_behaves_like 'DELETE #destroy', Conta do
-      let(:parametro_id_valido) { conta.id }
-      let(:parametro_id_invalido) { atributos_invalidos[:id] }
+    context 'com o id válido' do
+      before { delete :destroy, params: { id: conta.id } }
+
+      it 'alterar o status da conta para cancelado' do
+        expect(conta.reload.status).to eq('cancelado')
+      end
+
+      context 'retornar status code esperado' do
+        it_behaves_like '204 - :no_content'
+      end
+    end
+
+    context 'com o id inválido' do
+      before { delete :destroy, params: { id: atributos_invalidos[:id] } }
+
+      context 'retornar status code esperado' do
+        it_behaves_like '404 - :not_found'
+      end
     end
   end
 end

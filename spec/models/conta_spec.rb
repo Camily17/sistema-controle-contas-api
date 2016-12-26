@@ -19,17 +19,12 @@ RSpec.describe Conta, type: :model do
     end
 
     context ':status' do
-
       it 'deve estar presente' do should validate_presence_of(:status) end
       it 'deve ter um status válido' do should define_enum_for(:status).with(['cancelado', 'ativo', 'bloqueado']) end
     end
 
-    context ':pessoa_type' do
-      it 'deve estar presente' do should validate_presence_of(:pessoa_type) end
-    end
-
-    context ':pessoa_id' do
-      it 'deve estar presente' do should validate_presence_of(:pessoa_id) end
+    context ':pessoa' do
+      it 'deve estar presente' do should validate_presence_of(:pessoa) end
     end
   end
 
