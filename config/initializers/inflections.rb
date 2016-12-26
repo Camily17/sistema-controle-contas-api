@@ -14,3 +14,11 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.acronym 'API'
+  inflect.irregular 'pessoa_fisica', 'pessoas_fisicas'
+  inflect.irregular 'pessoa_juridica', 'pessoas_juridicas'
+  inflect.irregular 'conta', 'contas'
+  inflect.irregular 'transacao', 'transacoes'
+end
