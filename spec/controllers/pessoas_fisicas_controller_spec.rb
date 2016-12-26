@@ -53,11 +53,4 @@ RSpec.describe API::V1::PessoasFisicasController, type: :controller do
       let(:parametro_id_invalido) { atributos_invalidos[:id] }
     end
   end
-
-  describe 'DELETE #destroy' do
-    it_behaves_like 'DELETE #destroy', PessoaFisica do
-      let(:parametro_id_valido) { pessoa_fisica.id }
-      let(:parametro_id_invalido) { atributos_invalidos[:id] }
-    end
-  end
 end
